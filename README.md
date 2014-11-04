@@ -4,7 +4,10 @@ Hotfloat Widget for the Dashing dashboard
 
 ##About
 
-This widget is a fusion of the hotness widget and the number widget and deal with float.
+This widget is a fusion of the hotness widget and the standard number widget and deal with float.
+
+https://gist.github.com/rowanu/6246149
+http://dashing.io
 
 You neet to survey a pourcentage with evolution and color, this widget id for you.
 
