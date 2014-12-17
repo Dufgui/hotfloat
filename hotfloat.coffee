@@ -15,6 +15,11 @@ class Dashing.Hotfloat extends Dashing.Widget
     if @get('last')
       if parseFloat(@get('current')) > parseFloat(@get('last')) then 'icon-arrow-up' else 'icon-arrow-down'
 
+  mixin: (data) ->
+    if data?
+      @updateColor(data)
+    super data
+
   onData: (data) ->
     if data.status
       # clear existing "status-*" classes
@@ -23,26 +28,27 @@ class Dashing.Hotfloat extends Dashing.Widget
       # add new class
       $(@get('node')).addClass "status-#{data.status}"
 
-    node = $(@node)
-    current = parseFloat data.current
-    cool = parseFloat node.data "cool"
-    warm = parseFloat node.data "warm"
-    if warm >= cool
-      level = switch
-        when current <= cool then 0
-        when current >= warm then 4
-        else 
-          bucketSize = (warm - cool) / 3 # Total # of colours in middle
-          Math.ceil (current - cool) / bucketSize
-    else
-      level = switch
-        when current >= cool then 0
-        when current <= warm then 4
-        else 
-          bucketSize = (cool - warm ) / 3 # Total # of colours in middle
-          Math.ceil (cool - current) / bucketSize
+      @updateColor(data)
+    
+
+  updateColor: (data) ->
+    if data.current?
+      node = $(@node)
+      currentVal = parseFloat data.current
+      cool = parseFloat node.data "cool"
+      warm = parseFloat node.data "warm"
+      if warm >= cool
+        level = switch
+          when currentVal <= cool then 0
+          when currentVal >= warm then 4
+          else 1
+      else
+        level = switch
+          when currentVal >= cool then 0
+          when currentVal <= warm then 2
+          else  1
   
-    backgroundClass = "hotness#{level}"
-    lastClass = @get "lastClass"
-    node.toggleClass "#{lastClass} #{backgroundClass}"
-    @set "lastClass", backgroundClass
+      backgroundClass = "hotfloat#{level}"
+      lastClass = @get "lastClass"
+      node.toggleClass "#{lastClass} #{backgroundClass}"
+      @set "lastClass", backgroundClass
